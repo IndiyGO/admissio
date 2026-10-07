@@ -1,0 +1,35 @@
+dn: ou=people,dc=example,dc=org
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=sao-paulo,ou=people,dc=example,dc=org
+objectClass: organizationalUnit
+ou: sao-paulo
+
+dn: ou=rio,ou=people,dc=example,dc=org
+objectClass: organizationalUnit
+ou: rio
+
+dn: ou=groups,dc=example,dc=org
+objectClass: organizationalUnit
+ou: groups
+
+# An employee who already exists, to show login collision handling.
+dn: uid=ana.souza,ou=sao-paulo,ou=people,dc=example,dc=org
+objectClass: inetOrgPerson
+uid: ana.souza
+cn: Ana Souza
+sn: Souza
+givenName: Ana
+mail: ana.souza@sp.example.org
+employeeNumber: E0042
+
+dn: cn=staff-sp,ou=groups,dc=example,dc=org
+objectClass: groupOfNames
+cn: staff-sp
+member: uid=ana.souza,ou=sao-paulo,ou=people,dc=example,dc=org
+
+dn: cn=staff-rj,ou=groups,dc=example,dc=org
+objectClass: groupOfNames
+cn: staff-rj
+member: cn=admin,dc=example,dc=org

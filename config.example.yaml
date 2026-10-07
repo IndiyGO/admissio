@@ -1,0 +1,66 @@
+# admissio configuration — copy to config.yaml and adjust.
+# Any value can reference environment variables: ${NAME} or ${NAME:-default}.
+
+source:
+  type: csv                       # csv | rest
+  path: examples/new_hires.csv    # relative to this file
+  delimiter: ","
+  fields:                         # canonical field: column in your HR export
+    employee_id: employee_id
+    full_name: full_name
+    branch: branch
+    department: department
+    title: job_title
+    start_date: start_date
+
+  # REST example (any HR/BPM API that returns JSON):
+  # type: rest
+  # url: https://hr.example.com/api/hires?status=approved
+  # headers: { Authorization: "Bearer ${HR_API_TOKEN}" }
+  # records_path: data.items
+
+login:
+  # Tried in order until one is free in the directory.
+  patterns: ["{first}.{last}", "{second}.{last}", "{first}.{last}{n}"]
+  max_suffix: 9
+  max_length: 20                  # AD sAMAccountName limit
+
+password:
+  length: 14
+
+directory:
+  type: ldap                      # ldap | memory (offline demo)
+  flavor: openldap                # openldap | ad
+  url: ${LDAP_URL:-ldap://localhost:389}
+  bind_dn: ${LDAP_BIND_DN:-cn=admin,dc=example,dc=org}
+  bind_password: ${LDAP_BIND_PASSWORD:-admin}
+  base_dn: dc=example,dc=org
+
+  # Active Directory example:
+  # flavor: ad
+  # url: ldaps://dc01.corp.example.com
+  # auth: ntlm
+  # bind_dn: CORP\svc-provisioning
+  # bind_password: ${AD_PASSWORD}
+  # base_dn: DC=corp,DC=example,DC=com
+  # ca_file: /etc/ssl/certs/corp-root-ca.pem   # if your DC uses an internal CA
+  # tls_verify: true                            # never disable in production
+
+rules:
+  by_field: branch                # which field decides placement
+  default:
+    email_domain: example.org
+    ou: ou=people,dc=example,dc=org
+  match:
+    São Paulo:
+      email_domain: sp.example.org
+      ou: ou=sao-paulo,ou=people,dc=example,dc=org
+      groups: [cn=staff-sp,ou=groups,dc=example,dc=org]
+    Rio de Janeiro:
+      email_domain: rj.example.org
+      ou: ou=rio,ou=people,dc=example,dc=org
+      groups: [cn=staff-rj,ou=groups,dc=example,dc=org]
+
+report:
+  path: reports/run-{timestamp}.csv
+  include_passwords: true

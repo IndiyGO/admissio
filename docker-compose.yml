@@ -1,0 +1,38 @@
+# Local demo: an OpenLDAP server pre-seeded with OUs, groups and one existing user,
+# plus a web UI to browse what admissio created.
+#
+#   docker compose up -d
+#   admissio sync -c config.example.yaml
+#   open http://localhost:8080  (login: cn=admin,dc=example,dc=org / admin)
+
+services:
+  openldap:
+    image: osixia/openldap:1.5.0
+    command: --copy-service
+    environment:
+      LDAP_ORGANISATION: Example Corp
+      LDAP_DOMAIN: example.org
+      LDAP_ADMIN_PASSWORD: admin
+    ports:
+      - "389:389"
+    volumes:
+      - ./docker/seed.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-seed.ldif:ro
+
+  ldap-ui:
+    image: osixia/phpldapadmin:0.9.0
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: openldap
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"
+    depends_on: [openldap]
+
+  admissio:
+    build: .
+    profiles: [run]                # docker compose run --rm admissio sync -c config.example.yaml
+    environment:
+      LDAP_URL: ldap://openldap:389
+    volumes:
+      - ./:/work
+    working_dir: /work
+    depends_on: [openldap]

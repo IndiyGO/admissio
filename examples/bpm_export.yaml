@@ -1,0 +1,25 @@
+# Example: a BPM/workflow tool export where everything is packed in one column
+# and only one task type means "create the account".
+
+source:
+  type: csv
+  path: bpm_export.csv
+  unpack:
+    column: Summary
+    separator: "|"
+    kv_separator: ":"
+  where:
+    Step: Provision accounts
+  fields:
+    employee_id: Badge
+    full_name: Person
+    branch: Office
+    title: Position
+
+directory:
+  type: memory
+
+rules:
+  default:
+    email_domain: example.org
+    ou: ou=people,dc=example,dc=org

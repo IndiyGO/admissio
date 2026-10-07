@@ -1,0 +1,10 @@
+employee_id,full_name,branch,department,job_title,start_date
+E1001,Ana Paula Souza,São Paulo,Finance,Financial Analyst,2026-10-13
+E1002,Ana Beatriz Souza,São Paulo,Marketing,Designer,2026-10-13
+E1003,José da Silva,Rio de Janeiro,Sales,Account Executive,2026-10-13
+E1004,João Pedro de Oliveira,Rio de Janeiro,Engineering,Backend Developer,2026-10-20
+E1005,João Oliveira,Remote,Engineering,QA Engineer,2026-10-20
+E1006,Maria José dos Santos D'Ávila,São Paulo,Legal,Paralegal,2026-10-20
+E1007,Lucas Ferreira,SAO PAULO,Support,Support Specialist,2026-10-27
+E1003,José da Silva,Rio de Janeiro,Sales,Account Executive,2026-10-13
+E1008,,Remote,Engineering,Intern,2026-10-27
